@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>用户注册界面</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet"/>
+		<link href="css/login.css" rel="stylesheet" />
+		<script src="js/jquery-3.3.1.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("input").focus(function () {
+					$(this).css("background-color", "#C7DDEF");
+				});
+				$("input").blur(function () {
+					$(this).css("background-color", "#ffffff");
+				});
+			$(function () {
+				$('#password').focus(function () {
+					$('#worry1').text('');
+				});
+				$('#password').blur(function () {
+					var l = $(this).val();
+					var len = l.length;
+					if (len < 6 || len > 12)
+						$('#password').after('<font id="worry1" color="red">密码长度必须大于等于6，小于等于12</font>');
+				});
+			});
+                $(function () {
+                    $('#password2').focus(function () {
+                        $('#worry2').text('');
+                    });
+                    $('#password2').blur(function () {
+                        var password = fm.pwd.value;
+                        var password2 = fm.pwd2.value;
+                        if (password2 != password)
+                            $('#password2').after('<font id="worry2" color="red">两次密码不一致</font>');
+                        else
+                            $('#password2').after('<font id="worry2" color="#adff2f">两次密码一致</font>');
+                    });
+                });
+			})
+
+		</script>
+	</head>
+	<body>
+	<div class="text-center">
+		<h2>用户注册</h2><br />
+	</div><br />
+	<span id="myspan" style="text-size:20p; color:red;text-align: center; font-size: 15px" th:text="${msg}"></span>
+	<div>
+		<a href="login.html">返回登录</a><br />
+	</div>
+	<form class="fi form-signin" action="registertest" method="post" name="fm">
+		<input type="text" name="name" class="form-control" placeholder="请输入用户名" required="" autofocus="" id="name"/><br />
+		<input type="password" name="pwd" class="form-control" placeholder="请输入密码" required="" autofocus="" id="password"/><br />
+		<input type="password" name="pwd2" class="form-control" placeholder="确认密码" required="" autofocus="" id="password2"/><br>
+		<input type="text" name="yanzhengma" class="form-control" placeholder="请输入邮箱验证码" required="" autofocus="" id="yanzhengma" />
+		<button class="btn btn-lg btn-primary btn-block" type="submit" >注  册</button>
+	</form>
+
+	<footer class="text-center">
+		<p >Copyright&copy; 2020-2021</p>
+	</footer>
+	</body>
+</html>

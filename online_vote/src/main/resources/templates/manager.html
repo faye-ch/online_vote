@@ -1,0 +1,102 @@
+ <!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:with="component = ${'http://localhost:8088/node_modules/axios/dist/axios.min.js'},vueUrl='http://localhost:8088/node_modules/vue/dist/vue.js'">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="http://localhost:8088/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://localhost:8088/css/main.css">
+    <link rel="stylesheet" href="http://localhost:8088/css/style.css">
+    <script th:src="@{(${vueUrl})}"></script>
+    <script th:src="@{(${component})}"></script>
+</head>
+<body>
+<div class="header-area home1">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                <div class="classic-logo">
+                    <a href="http://localhost:8088/index">
+                        <!--<h3 style="color: white;font-weight: bolder">投投网</h3>-->
+                        <img src="http://localhost:8088/img/logo.jpg">
+                    </a>
+                </div>
+            </div>
+            <div class="hidden-xs hidden-sm col-md-6 col-lg-6">
+                <div class="header-menu">
+                    <ul id="nav">
+                        <li><a href="http://localhost:8088/index">首页</a></li>
+                        <li><a href="#">功能介绍</a></li>
+                        <li>
+                            <a th:href="|http://localhost:8088/managerVoteList/${userid}|" th:if="${userid!=null}">投票管理</a>
+                            <!--<a th:each="cookie :${#httpServletRequest.getCookies()}" th:if="${cookie.getName().equals('userid')}" th:text="" th:href="|http://localhost:8088/managerVoteList/${session.userid}|">投票管理</a>-->
+                            <a th:if="${userid==null}" href="http://localhost:8088/login.html">投票管理</a>
+                            <!--<a href="http://localhost:8088/managerVoteList/7">投票管理</a>-->
+                        </li>
+                        <li>
+                            <a href="http://localhost:8088/add" th:if="${userid!=null}">发起投票</a>
+                            <a href="http://localhost:8088/login.html" th:if="${userid==null}">发起投票</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                <div class="header-info">
+                    <ul>
+                        <li>
+                            <a href="#" th:if="${username!=null}" th:text="${username}"></a>
+                            <a href="http://localhost:8088/login.html" th:if="${username==null}">登录</a>
+                        </li>
+                        <li>
+                            <a href="http://localhost:8088/register.html" th:if="${username==null}">注册</a>
+                            <a href="http://localhost:8088/outLogin" th:if="${username!=null}">退出</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="slider-area home1">
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4 class=panel-title"">我的投票</h4>
+                </div>
+                <div class="panel-body">
+                    <div id="app">
+                        <div></div>
+                        <div>
+                            <table class="table table-hover">
+                                <tr class="vote" th:each="article : ${voteList}" th:with="chartPage=${'http:localhost:8088/chart.html?'}">
+                                    <td th:text="${article.title}"></td>
+                                    <td>
+                                        <i class="glyphicon glyphicon-paperclip"></i>
+                                        <a th:href="|http://localhost:8088/voteDetail/${article.id}|">分享连接</a>
+                                        <i class="glyphicon glyphicon-search"></i>
+                                        <a th:href="'http://localhost:8088/manageCheckResult/'+${article.id}">查看数据</a>
+                                        <i class="glyphicon glyphicon-remove" style="color: red"></i>
+                                        <a th:href="|http://localhost:8088/deleteArticle/${article.id}|">删除</a>
+                                        <i class="glyphicon glyphicon-cog"></i>
+                                        <a th:href="|http://localhost:8088/retrunVote/${article.id}|">修改</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<h3 class="myvote">我的投票</h3>-->
+</div>
+
+</body>
+<script>
+</script>
+</html>

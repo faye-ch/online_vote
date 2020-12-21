@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="http://localhost:8088/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://localhost:8088/css/main.css">
+    <link rel="stylesheet" href="http://localhost:8088/css/style.css">
+</head>
+<body>
+<div class="header-area home1">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                <div class="classic-logo">
+                    <a href="http://localhost:8088/index">
+                        <!--<h3 style="color: white;font-weight: bolder">投投网</h3>-->
+                        <img src="http://localhost:8088/img/logo.jpg">
+                    </a>
+                </div>
+            </div>
+            <div class="hidden-xs hidden-sm col-md-6 col-lg-6">
+                <div class="header-menu">
+                    <ul id="nav">
+                        <li><a href="http://localhost:8088/index">首页</a></li>
+                        <li><a href="#">功能介绍</a></li>
+                        <li>
+                            <a th:href="|http://localhost:8088/managerVoteList/${userid}|" th:if="${userid!=null}">投票管理</a>
+                            <!--<a th:each="cookie :${#httpServletRequest.getCookies()}" th:if="${cookie.getName().equals('userid')}" th:text="" th:href="|http://localhost:8088/managerVoteList/${session.userid}|">投票管理</a>-->
+                            <a th:if="${userid==null}" href="http://localhost:8088/login.html">投票管理</a>
+                            <!--<a href="http://localhost:8088/managerVoteList/7">投票管理</a>-->
+                        </li>
+                        <li>
+                            <a href="http://localhost:8088/add" th:if="${userid!=null}">发起投票</a>
+                            <a href="http://localhost:8088/login.html" th:if="${userid==null}">发起投票</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                <div class="header-info">
+                    <ul>
+                        <li>
+                            <a href="#" th:if="${username!=null}" th:text="${username}"></a>
+                            <a href="http://localhost:8088/login.html" th:if="${username==null}">登录</a>
+                        </li>
+                        <li>
+                            <a href="http://localhost:8088/register.html" th:if="${username==null}">注册</a>
+                            <a href="http://localhost:8088/outLogin" th:if="${username!=null}">退出</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="slider-area home1">
+    <br>
+    <div class="row">
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h4 class="panel-title">投票页面</h4>
+                </div>
+                <div class="panel-body">
+                    <h3 class="voteTitle" th:text="${view.title}"></h3>
+                    <h5 style="color: #8c8c8c">投完票可以查看投票情况</h5>
+                    <img class="img-rounded" style="width: 500px;height: 300px" th:src="|http://localhost:8088/image/${view.img}|">
+                    <form action="http://localhost:8088/submitVote" method="post">
+                        <li th:each="option,stat: ${view.optionList}">
+                            <i class="glyphicon glyphicon-star"></i>
+                            <i style="font-weight: bolder" th:text="${option.optionvalue}"></i>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="checkbox" name="optionid" th:if="${view.type}==1" th:value="${option.id}">
+                            <input type="radio" name="optionid" th:value="${option.id}" th:if="${view.type}==0"/>
+                            <input type="hidden" name="articleid" th:value="${view.id}" th:if="${stat.last}">
+                            <br th:if="${stat.last}">
+                            <input type="hidden" th:if="${stat.last}" name="ipCity" id="ipCity">
+                            <button class="btn btn-success " th:if="${stat.last}"  type="submit"><i class="glyphicon glyphicon-ok"></i>投票</button>
+                        </li>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="http://127.0.0.1:8088/js/jquery-3.5.0.js"></script>
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script type="text/javascript">
+    $(function () {
+        var ipAndCity = returnCitySN["cip"]+','+returnCitySN["cname"];
+        console.log(ipAndCity);
+        $("#ipCity").val(ipAndCity);
+    });
+</script>
+</body>
+</html>

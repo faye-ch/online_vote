@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.two.vote.dao.UserMapper">
+    <select id="queryByEmail" resultType="user">
+        select * from user where email = #{email}
+    </select>
+
+    <select id="queryById" resultType="user">
+        select * from user where id=#{id}
+    </select>
+
+    <insert id="save">
+        insert into user(username,password,email) value(#{username},#{password},#{email})
+    </insert>
+
+    <update id="updateType1">
+        update user set type=1 where id = #{id}
+    </update>
+
+    <update id="updateType0">
+        update user set type=0 where id = #{id}
+    </update>
+
+    <select id="queryUser" resultType="user">
+        select * from user
+    </select>
+
+    <update id="updatePassword">
+        update user set password = #{password}  where email = #{email}
+    </update>
+
+    <update id="updateUsername">
+        update user set username=#{username}  where email = #{email}
+    </update>
+
+</mapper>

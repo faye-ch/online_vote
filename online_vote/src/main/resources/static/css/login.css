@@ -1,0 +1,63 @@
+body{ 
+    position: absolute;  /*绝对定位*/
+	left: 50%;
+	top: 50%;
+	margin: -250px 0 0 -150px; /*上左下右*/
+	padding: 20px;
+	width: 380px;
+	height: 380px;
+	background: url(../img/03.jpg) no-repeat;
+	background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-position: center 0;
+    
+}
+.fi input{
+	color: black;
+}
+
+h2{
+	color: whitesmoke;
+	font-family: "arial, helvetica, sans-serif";
+	font-style: inherit;
+}
+button{
+    margin-top: 30px;
+    margin-bottom: 20px;
+    background: #487eb0;
+    color: #fff;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: 0.8s;
+}
+
+.rem{
+	color: whitesmoke;
+	font-size: 16px;
+	font-weight: bold;
+}
+.rem input{
+	height: 15px;
+	width: 19px;
+}
+a{
+	float: right;
+	font-size: 16px;
+	color: whitesmoke;
+	font-weight: bold;
+}
+button:hover{  /*鼠标悬浮动态*/
+	color: #BCE8F1;
+	background: rgb(22,160,93);
+}
+a:hover{
+	color: black;
+	text-decoration: none;
+}
+p{
+	color: black;
+	font-family: "bradley hand itc";
+	font-size: 14px;
+	padding-top:150px ;
+}

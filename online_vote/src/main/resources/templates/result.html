@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="http://localhost:8088/css/bootstrap.min.css">
+    <script type="text/javascript" src="http://localhost:8088/js/jquery-3.5.0.min.js"></script>
+    <script type="text/javascript" src="http://localhost:8088/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://localhost:8088/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://localhost:8088/css/main.css">
+    <link rel="stylesheet" href="http://localhost:8088/css/style.css">
+</head>
+<body>
+<div class="header-area home1">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                <div class="classic-logo">
+                    <a href="http://localhost:8088/index">
+                        <!--<h3 style="color: white;font-weight: bolder">投投网</h3>-->
+                        <img src="http://localhost:8088/img/logo.jpg">
+                    </a>
+                </div>
+            </div>
+            <div class="hidden-xs hidden-sm col-md-6 col-lg-6">
+                <div class="header-menu">
+                    <ul id="nav">
+                        <li><a href="http://localhost:8088/index">首页</a></li>
+                        <li><a href="#">功能介绍</a></li>
+                        <li>
+                            <a th:href="|http://localhost:8088/managerVoteList/${userid}|" th:if="${userid!=null}">投票管理</a>
+                            <!--<a th:each="cookie :${#httpServletRequest.getCookies()}" th:if="${cookie.getName().equals('userid')}" th:text="" th:href="|http://localhost:8088/managerVoteList/${session.userid}|">投票管理</a>-->
+                            <a th:if="${userid==null}" href="http://localhost:8088/login.html">投票管理</a>
+                            <!--<a href="http://localhost:8088/managerVoteList/7">投票管理</a>-->
+                        </li>
+                        <li>
+                            <a href="http://localhost:8088/add" th:if="${userid!=null}">发起投票</a>
+                            <a href="http://localhost:8088/login.html" th:if="${userid==null}">发起投票</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                <div class="header-info">
+                    <ul>
+                        <li>
+                            <a href="#" th:if="${username!=null}" th:text="${username}"></a>
+                            <a href="http://localhost:8088/login.html" th:if="${username==null}">登录</a>
+                        </li>
+                        <li>
+                            <a href="http://localhost:8088/register.html" th:if="${username==null}">注册</a>
+                            <a href="http://localhost:8088/outLogin" th:if="${username!=null}">退出</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="slider-area home1">
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-7">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">投票情况</h3>
+                </div>
+                <div class="panel-body">
+                    <h5 class="voteTitle" th:text="${resultView.title}"></h5>
+                    <h5 class="voteTitle" style="color: #8c8c8c" th:text="|截至时间:${resultView.endtime}|"></h5>
+                    <br>
+                    <table>
+                        <tr th:each="option : ${resultView.optionAndNumViews}">
+                            <td><i class="glyphicon glyphicon-star"></i></td>
+                            <td th:text="${option.optionvalue}"></td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            <td>
+                                <div class="progress" style="width: 500px;">
+                                    <div class="progress-bar progress-bar-danger"  role="progressbar" aria-valuenow="60"
+                                         aria-valuemin="0" aria-valuemax="100" th:style="${option.width}">
+                                        <i class="sr-only" th:text="${option.tips}"></i>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            <td th:text="${option.tips}"></td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                            <td th:text="|${option.num}票|"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

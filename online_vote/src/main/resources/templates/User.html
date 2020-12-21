@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>用户信息</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../css/login.css" rel="stylesheet" />
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("input").focus(function(){
+                $(this).css("background-color","#C7DDEF");
+            });
+            $("input").blur(function(){
+                $(this).css("background-color","#FFFFFF");
+            });
+
+        });
+
+        function outlogin() {
+            window.location.href="outLogin";
+        }
+
+    </script>
+</head>
+<body>
+<div class="text-center">
+    <h2>用户信息</h2><br />
+</div><br />
+
+<form class="fi form-signin" action="updateUser" method="post">
+    <input type="text" style="display: none" name="email" th:value="${session.email}">
+    邮&nbsp;&nbsp;&nbsp;&nbsp;箱：
+    <span style="font-size: 13px;font-family: 微软雅黑" th:text="${session.email}">邮箱为空</span><br>
+    用户名（原）：
+    <span style="font-size: 13px;font-family: 微软雅黑" th:text="${session.username}">用户名为空</span><br>
+    用户名（新）：
+    <input class="form-control" type="text" name="username"><br>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">修改用户名</button>
+</form>
+
+<button class="btn btn-lg btn-primary btn-block" type="button" onclick="outlogin()">退出登录</button>
+
+
+<footer class="text-center">
+    <p >Copyright&copy; 2020-2021</p>
+</footer>
+</body>
+
+</html>

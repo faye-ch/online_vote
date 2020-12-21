@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- saved from url=(0040)http://localhost/vote/admin/addNewtp.jsp -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <!--<base href="/vote/">--><base href=".">
+    <title></title>
+    <link rel="stylesheet" href="./reg.css">
+    <script src="js/jquery-3.5.0.js"></script>
+    <link rel="stylesheet" href="http://localhost:8088/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://localhost:8088/css/main.css">
+    <link rel="stylesheet" href="http://localhost:8088/css/style.css">
+</head>
+<body>
+<div class="third">
+    <div class="header-area home1">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                    <div class="classic-logo">
+                        <a href="http://localhost:8088/index">
+                            <!--<h3 style="color: white;font-weight: bolder">投投网</h3>-->
+                            <img src="http://localhost:8088/img/logo.jpg">
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden-xs hidden-sm col-md-6 col-lg-6">
+                    <div class="header-menu">
+                        <ul id="nav">
+                            <li><a href="http://localhost:8088/index">首页</a></li>
+                            <li><a href="#">功能介绍</a></li>
+                            <li>
+                                <a th:href="|http://localhost:8088/managerVoteList/${userid}|" th:if="${userid!=null}">投票管理</a>
+                                <!--<a th:each="cookie :${#httpServletRequest.getCookies()}" th:if="${cookie.getName().equals('userid')}" th:text="" th:href="|http://localhost:8088/managerVoteList/${session.userid}|">投票管理</a>-->
+                                <a th:if="${userid==null}" href="http://localhost:8088/login.html">投票管理</a>
+                                <!--<a href="http://localhost:8088/managerVoteList/7">投票管理</a>-->
+                            </li>
+                            <li>
+                                <a href="http://localhost:8088/add" th:if="${userid!=null}">发起投票</a>
+                                <a href="http://localhost:8088/login.html" th:if="${userid==null}">发起投票</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                    <div class="header-info">
+                        <ul>
+                            <li>
+                                <a href="#" th:if="${username!=null}" th:text="${username}"></a>
+                                <a href="http://localhost:8088/login.html" th:if="${username==null}">登录</a>
+                            </li>
+                            <li>
+                                <a href="http://localhost:8088/register.html" th:if="${username==null}">注册</a>
+                                <a href="http://localhost:8088/outLogin" th:if="${username!=null}">退出</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="slider-area home1">
+        <div class="row">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-5 myform">
+                <br>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">添加新投票</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <form action="http://localhost:8088/addVote" method="post" onsubmit="return check()" enctype="multipart/form-data">
+                                <div id="img">
+                                    <p>选择上传背景图片</p>
+                                    <img class="user-header img-rounded" style="width: 100px;height: 100px;object-fit: cover;" src="http://localhost:8088/image/001.png">
+                                    <br>
+                                    <input  type="file" name=file onchange="imgChange(event)" id="file" style="display: none"/>
+                                </div>
+                                <table style="width: 480px">
+                                    <tbody><tr>
+                                        <td>投票内容：</td>
+                                        <td><input class="form-control bb" type="text" name="title"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>开始时间:</td>
+                                        <td><input class="form-control bb" type="date" name="starttime"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>结束时间:</td>
+                                        <td><input class="form-control bb" type="date" name="endtime" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>投票类型：</td>
+                                        <td align="left">
+                                            <input type="radio" name="type" value="0" checked="checked" >单选
+                                            <input type="radio" name="type" value="1">多选
+                                        </td>
+                                    </tr>
+                                    </tbody><tbody id="addTr">
+                                <tr>
+                                    <td>投票选项：</td>
+                                    <td><input class="form-control bb" type="text" name="option"></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><input  class="form-control bb" type="text" name="option"></td>
+                                </tr>
+                                <br/>
+                                </tbody>
+                                    <tbody><tr>
+                                        <td></td>
+                                        <td align="left">
+                                            <input class="btn btn-info" type="submit" value="提交" onclick="confirm()">
+                                            &nbsp;&nbsp;&nbsp;
+                                            <a id="getStr" class="btn btn-primary">增加选项</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                    </tbody></table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--&lt;!&ndash;询问弹窗&ndash;&gt;-->
+<!--<div class="hsycms-model-mask" id="mask-confirm"></div>-->
+<!--<div class="hsycms-model hsycms-model-confirm" id="confirm">-->
+    <!--<div class="hscysm-model-title">温馨提示</div>-->
+    <!--<div class="hsycms-model-text">确定要操作？</div>-->
+    <!--<div class="hsycms-model-btn">-->
+        <!--<button type="button" class="cancel">取消</button>-->
+        <!--<button type="button" class="ok">确定</button>-->
+    <!--</div>-->
+<!--</div>-->
+
+<!--提交成功-->
+<!--<div class="hsycms-model-mask" id="mask-success"></div>-->
+<!--<div class="hsycms-model hsycms-model-success" id="success">-->
+    <!--<div class="hsycms-model-icon">-->
+        <!--<svg width="50" height="50">-->
+            <!--<circle class="hsycms-alert-svgcircle"  cx="25" cy="25" r="24" fill="none" stroke="#238af4" stroke-width="2"></circle>-->
+            <!--<polyline class="hsycms-alert-svggou" fill="none" stroke="#238af4" stroke-width="2.5" points="14,25 23,34 36,18" stroke-linecap="round" stroke-linejoin="round" />-->
+        <!--</svg>-->
+    <!--</div>-->
+    <!--<div class="hsycms-model-text">操作成功</div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash;提交失败&ndash;&gt;-->
+<!--<div class="hsycms-model-mask" id="mask-error"></div>-->
+<!--<div class="hsycms-model hsycms-model-error" id="error">-->
+    <!--<div class="hsycms-model-icon">-->
+        <!--<svg width="50" height="50">-->
+            <!--<circle class="hsycms-alert-svgcircle"  cx="25" cy="25" r="24" fill="none" stroke="#f54655" stroke-width="2"></circle>-->
+            <!--<polyline class="hsycms-alert-svgca1" fill="none" stroke="#f54655" stroke-width="2.5" points="18,17 32,35" stroke-linecap="round" stroke-linejoin="round" />-->
+            <!--<polyline class="hsycms-alert-svgca2" fill="none" stroke="#f54655" stroke-width="2.5" points="18,35 32,17" stroke-linecap="round" stroke-linejoin="round" />-->
+        <!--</svg>-->
+    <!--</div>-->
+    <!--<div class="hsycms-model-text">操作失败</div>-->
+<!--</div>-->
+
+<script>
+    //询问弹窗
+    function confirm(){
+        hsycms.confirm('confirm','确定要这么做',
+            function(res){
+                hsycms.success('success','成功！');
+            },
+            function(res){
+                hsycms.error('error','取消');
+            },
+        )
+    }
+    //操作成功调用
+    function success(){
+        hsycms.success('success','操作成功',function(){  console.log('操作成功关闭后');  },1800)
+    }
+
+    //操作失败调用
+    function error(){
+        hsycms.error('error','操作失败',function(){  console.log('操作失败关闭后');  },1800)
+    }
+
+</script>
+<script type="text/javascript">
+    function imgChange(e) {
+        console.info(e.target.files[0]);//图片文件
+        console.log(e.target.value);//这个也是文件的路径和上面的dom.value是一样的
+        var reader = new FileReader();
+        reader.onload = (function (file) {
+            return function (e) {
+                $('.user-header').attr('src',this.result);
+            };
+        })(e.target.files[0]);
+        reader.readAsDataURL(e.target.files[0]);
+    }
+
+    $('.user-header').click(function () {
+        $("#file").click();
+    });
+
+    function testUpload(){
+        var form = new FormData();
+        form.append('file',$("#file")[0].files[0]);
+        $.ajax({
+            url:"http://localhost:8088/upload",
+            data:form,
+            type:"POST",
+            processData:false,
+            contentType:false,
+            success : function(result){
+                if(result.status==200){
+                    alert("成功")
+                }else{
+                    alert(result.msg);
+                }
+            },
+        });
+    }
+</script>
+<script src="http://localhost:8088/js/check.js"></script>
+</body></html>

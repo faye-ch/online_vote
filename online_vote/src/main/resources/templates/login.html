@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<title>用户登录界面</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet"/>
+		<link href="../css/login.css" rel="stylesheet" />
+		<script src="../js/jquery-3.3.1.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("input").focus(function(){
+					$(this).css("background-color","#C7DDEF");
+				});
+			    $("input").blur(function(){                  	
+				    $(this).css("background-color","#FFFFFF");
+			    });
+		});
+
+            var cookies = document.cookie.split(';');
+            function getCK(mkey) {
+                for (var i=0;i<cookies.length;i++){
+                    var kv = cookies[i].split('=');
+                    if (kv[0].trim()==mkey){
+                        return kv[1].trim();
+                    }
+                }
+                return '';
+            }
+
+            window.onload=function () {
+                var remember = getCK('remember');
+                var name = getCK('name');
+                var pwd = getCK('pwd');
+
+                if (remember == 'true'){
+                    var nameInput = document.getElementById("name");
+                    nameInput.value=name;
+                    var pwdInput = document.getElementById("pwd");
+                    pwdInput.value=pwd;
+                    var rememberInput = document.getElementById("remember");
+                    rememberInput.checked();
+                }
+            }
+		</script>
+	</head>
+	<body>
+		<div class="text-center">
+			<h2>欢迎登录</h2><br />
+		</div><br />
+		<form class="fi form-signin" action="logintest" method="post">
+			<input type="email" id="name" name="name" class="form-control" placeholder="请输入账号(邮箱)" required="" autofocus=""/>
+            <span id="myspan" style="text-size:20p; color:red;text-align: center; font-size: 15px" th:text="${lmsg}"></span><br />
+            <input type="password" id="pwd" name="pwd" class="form-control" placeholder="请输入密码" required="" autofocus=""/>
+            <span id="pwdspan" style="text-size:15p; color:red;text-align: center; font-size: 15px" th:text="${pmsg}"></span>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">登  录</button><br />
+			<div>
+				<label class="rem"><input type="checkbox" name="remember" value="true" />记住密码</label>
+				<a href="registerTemplates.html">注册账号</a><br />
+				<a href="zhaohui.html">忘记密码</a><br />
+			</div>
+        </form>
+
+        
+        <footer class="text-center">
+        	<p >Copyright&copy; 2020-2021</p>
+        </footer>
+	</body>
+</html>

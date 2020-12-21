@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="http://localhost:8088/css/bootstrap.min.css">
+    <script type="text/javascript" src="http://localhost:8088/js/jquery-3.5.0.min.js"></script>
+    <script type="text/javascript" src="http://localhost:8088/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://localhost:8088/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://localhost:8088/css/main.css">
+    <link rel="stylesheet" href="http://localhost:8088/css/style.css">
+    <style>
+        body{
+            background-color: #F9F9F9;
+        }
+    </style>
+</head>
+<body onload="map()">
+<div class="header-area home1">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                <div class="classic-logo">
+                    <a href="http://localhost:8088/index">
+                        <!--<h3 style="color: white;font-weight: bolder">投投网</h3>-->
+                        <img src="http://localhost:8088/img/logo.jpg">
+                    </a>
+                </div>
+            </div>
+            <div class="hidden-xs hidden-sm col-md-6 col-lg-6">
+                <div class="header-menu">
+                    <ul id="nav">
+                        <li><a href="http://localhost:8088/index">首页</a></li>
+                        <li><a href="#">功能介绍</a></li>
+                        <li>
+                            <a th:href="|http://localhost:8088/managerVoteList/${userid}|" th:if="${userid!=null}">投票管理</a>
+                            <!--<a th:each="cookie :${#httpServletRequest.getCookies()}" th:if="${cookie.getName().equals('userid')}" th:text="" th:href="|http://localhost:8088/managerVoteList/${session.userid}|">投票管理</a>-->
+                            <a th:if="${userid==null}" href="http://localhost:8088/login.html">投票管理</a>
+                            <!--<a href="http://localhost:8088/managerVoteList/7">投票管理</a>-->
+                        </li>
+                        <li>
+                            <a href="http://localhost:8088/add" th:if="${userid!=null}">发起投票</a>
+                            <a href="http://localhost:8088/login.html" th:if="${userid==null}">发起投票</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                <div class="header-info">
+                    <ul>
+                        <li>
+                            <a href="#" th:if="${username!=null}" th:text="${username}"></a>
+                            <a href="http://localhost:8088/login.html" th:if="${username==null}">登录</a>
+                        </li>
+                        <li>
+                            <a href="http://localhost:8088/register.html" th:if="${username==null}">注册</a>
+                            <a href="http://localhost:8088/outLogin" th:if="${username!=null}">退出</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="slider-area home1">
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-lg-2">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-10">
+                <h5 th:text="|投票主题:${resultView.title}|" style="font-weight: bolder"></h5>
+                <h5 style="font-weight: bolder">数据概况：</h5>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="col-lg-4">
+                <div class="well" style="background-color: #7DC855;color: white;width: 300px;height: 100px">
+                    <div class="row">
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-4">
+                            <p> </p>
+                            <h3 class="glyphicon glyphicon-ok"></h3>
+                        </div>
+                        <div class="col-lg-4">
+                            <p style="color: #D8EFCC;font-weight: bolder">总票数</p>
+                            <h3 th:text="|${total}|"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="well" style="background-color: #358ED7;color: white;width: 300px;height: 100px">
+                    <div class="row">
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-4">
+                            <p> </p>
+                            <h3 class="glyphicon glyphicon-hand-right"></h3>
+                        </div>
+                        <div class="col-lg-4">
+                            <p style="color: #D8EFCC;font-weight: bolder">点击量</p>
+                            <h3 th:text="|${resultView.hot}|"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="well" style="background-color:white;color: black;width: 300px;height: 100px">
+                    <div class="row">
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-4">
+                            <p> </p>
+                            <h3 class="glyphicon glyphicon-stats"></h3>
+                        </div>
+                        <div class="col-lg-4">
+                            <p style="color: #86939E;font-weight: bolder">投票率</p>
+                            <h3 th:text="|${rate}|"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-5">
+        <div class="well" style="background-color: white;height: 400px;width: 640px">
+            <h4>投票结果</h4>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <table>
+                <tr th:each="option : ${resultView.optionAndNumViews}">
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td th:text="${option.optionvalue}"></td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>
+                        <div>
+
+                        </div>
+                        <div class="progress" style="width: 300px">
+                            <div class="progress-bar progress-bar-danger"  role="progressbar" aria-valuenow="60"
+                                 aria-valuemin="0" aria-valuemax="100" th:style="${option.width}">
+                                <span class="sr-only" th:text="${option.tips}"></span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td th:text="${option.tips}"></td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                    <td th:text="|${option.num}票|"></td>
+                </tr>
+            </table>
+        </div>
+        </div>
+        <div class="col-sm-1" style="width: 40px;height: 400px"></div>
+        <div class="col-lg-5">
+            <div class="well" id="pie" style="background-color: white;height: 400px;width: 500px">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-4">
+            <div class="well" style="width: 490px;height: 500px;background-color: white">
+                <div id="bar" style="width: 400px;height: 400px"></div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="well" style="height: 500px;width: 800px;background-color: white">
+                <td th:each="option,stat : ${resultView.optionAndNumViews}">
+                    <button th:if="${stat.first}" class="btn btn-danger" onclick="optionMap(this)">总计</button>
+                    <button class="btn btn-danger" th:text="${option.optionvalue}" onclick="optionMap(this)" th:value="${option.id}"></button>
+                </td>
+                <div id="map" style="width: 700px;height: 450px"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="http://localhost:8088/node_modules/axios/dist/axios.min.js"></script>
+<script src="http://localhost:8088/node_modules/echarts/dist/echarts.min.js"></script>
+<script src="http://localhost:8088/node_modules/echarts/dist/echarts.js"></script>
+<script src="http://localhost:8088/node_modules/echarts/map/js/china.js"></script>
+<script src="http://localhost:8088/js/MapSet.js"></script>
+<script src="http://localhost:8088/js/jquery-3.5.0.js"></script>
+<script>
+
+    var currentUrl = window.location.href;
+    var strings = currentUrl.split("/");
+    var param = strings[strings.length-1];
+    var pieChartUrl = "http://localhost:8088/getPieView/"+param;
+    console.log(param)
+
+    axios.get(pieChartUrl).then(({data})=>{
+        articleAndOptions = data;
+        var pie = echarts.init(document.getElementById('pie'));
+        option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            title: {
+                text: '投票比例分析',
+                subtext: '实时统计',
+                left: 'center'
+            },
+            series: [
+                {
+                    name: '票',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data:articleAndOptions,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        pie.setOption(option);
+    })
+
+    var bar = echarts.init(document.getElementById('bar'));
+    var barUrl = "http://localhost:8088/getBarView/"+param;
+    axios.get("http://localhost:8088/getBarView/"+param).then(({data})=>{
+        var response = data;
+        const nameList = response.nameList;
+        const valueList = response.valueList;
+        option = {
+            color:['#9AC6EB'],
+            title: {
+                text: '直方图分析',
+                subtext: '实时统计',
+                left: 'center'
+            },
+            xAxis: {
+                type: 'category',
+                data: nameList
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: valueList,
+                type: 'bar'
+            }]
+        };
+        bar.setOption(option);
+    })
+
+    var optionMap = function optionBtn(e) {
+        mapUrl = "http://localhost:8088/getSource/"+param+"?optionid="+e.value;
+        console.log(mapUrl);
+        map();
+    }
+
+    var mapUrl = "http://localhost:8088/getSource/"+param;
+    function map() {
+        axios.get(mapUrl).then(({data})=>{
+            const list=data.valueAndNameList
+            const max = data.max;
+            const min = data.min;
+            var map = echarts.init(document.getElementById('map'));
+            map.showLoading();
+            map.hideLoading();
+            option = {
+                title: {
+                    text: '',
+                    left: 'right'
+                },
+                title: {
+                    text: '投票来源区域分析',
+                    subtext: 'IP分析',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}<br/>{c} (票)'
+                },
+                visualMap: {
+                    left: 'right',
+                    min: min,
+                    max: max,
+                    inRange: {
+                        color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+                    },
+                    text: ['High', 'Low'],           // 文本，默认为数值文本
+                    calculable: true
+                },
+                toolbox: {
+                    show: true,
+                    //orient: 'vertical',
+                    left: 'left',
+                    top: 'top',
+                    feature: {
+                        dataView: {readOnly: false},
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                series: [
+                    {
+                        name: 'CHN',
+                        type: 'map',
+                        roam: true,
+                        map: 'china',
+                        emphasis: {
+                            label: {
+                                show: true
+                            }
+                        },
+                        // 文本位置修正
+                        textFixed: {
+                            Alaska: [20, -20]
+                        },
+                        data:list
+                    }
+                ]
+            };
+            map.setOption(option);
+
+        })
+
+    }
+
+</script>
+
+</body>
+</html>

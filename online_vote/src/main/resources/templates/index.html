@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="http://localhost:8088/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://localhost:8088/css/main.css">
+    <link rel="stylesheet" href="http://localhost:8088/css/style.css">
+
+</head>
+<body>
+<div id="app">
+    <!--header-area start-->
+    <div class="header-area home1">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                    <div class="classic-logo">
+                        <a href="http://localhost:8088/indexl">
+                            <!--<h3 style="color: white;font-weight: bolder">投投网</h3>-->
+                            <img src="http://localhost:8088/img/logo.jpg">
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden-xs hidden-sm col-md-6 col-lg-6">
+                    <div class="header-menu">
+                        <ul id="nav">
+                            <li><a href="http://localhost:8088/index">首页</a></li>
+                            <li><a href="#">功能介绍</a></li>
+                            <li>
+                                <a th:href="|http://localhost:8088/managerVoteList/${userid}|" th:if="${userid!=null}">投票管理</a>
+                                <!--<a th:each="cookie :${#httpServletRequest.getCookies()}" th:if="${cookie.getName().equals('userid')}" th:text="" th:href="|http://localhost:8088/managerVoteList/${session.userid}|">投票管理</a>-->
+                                <a th:if="${userid==null}" href="http://localhost:8088/login.html">投票管理</a>
+                                <!--<a href="http://localhost:8088/managerVoteList/7">投票管理</a>-->
+                            </li>
+                            <li>
+                                <a href="http://localhost:8088/add" th:if="${userid!=null}">发起投票</a>
+                                <a href="http://localhost:8088/login.html" th:if="${userid==null}">发起投票</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                    <div class="header-info">
+                        <ul>
+                            <li>
+                                <a href="http://localhost:8088/User" th:if="${username!=null}" th:text="${username}"></a>
+                                <a href="http://localhost:8088/login.html" th:if="${username==null}">登录</a>
+                            </li>
+                            <li>
+                                <a href="http://localhost:8088/register.html" th:if="${username==null}">注册</a>
+                                <a href="http://localhost:8088/outLogin" th:if="${username!=null}">退出</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--header-area start-->
+
+    <div class="slider-area home1">
+        <br/>
+        <div class="form-group ">
+            <input class="input-lg" type="text" style="width: 500px;" @keyup.enter="search" @input="search($event)"/>
+            <button class="btn btn-lg"  id="search" type="submit" @click="searching"><i class="glyphicon glyphicon-search"></i></button>
+        </div>
+        <div class="list">
+            <table class="table table-hover">
+                <tr  v-for="vote in voteList">
+                    <td>
+                        <h4  class="vote">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a :href="baseUrl+vote.id" class="vote">{{vote.title}}</a>
+                        </h4>
+                        <!--<p style="color: #cccccc;font-size: 2px">截至时间:{{vote.deadline}}</p>-->
+                    </td>
+                    <td>
+                        <button v-if="vote.flag" class="btn glyphicon glyphicon-search"><a :href="'http://localhost:8088/checkResult/'+vote.id">查看投票</a></button>
+                        &nbsp;
+                        <i v-if="vote.flag" class="glyphicon glyphicon-ok" style="color: green">已投</i>
+                        <button v-if="!vote.flag" class="glyphicon glyphicon-hand-right btn"><a :href="baseUrl+vote.id">参与</a></button>
+                        <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+                        <b>&nbsp;&nbsp;&nbsp;&nbsp;点击量</b><b class="badge" style="background-color: #BA9043" >{{vote.hot}}</b>
+                    </td>
+                    <!--<td><b>点击量</b><b class="badge" style="background-color:#FF9F3C">{{vote.hot}}</b></td>-->
+
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+
+<script src="http://localhost:8088/node_modules/vue/dist/vue.js"></script>
+<script src="http://localhost:8088/node_modules/axios/dist/axios.min.js"></script>
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script src="http://localhost:8088/js/jquery-3.5.0.js"></script>
+<script type="application/javascript">
+</script>
+<script type="application/javascript">
+    var app = new Vue({
+        el:"#app",
+        data:{
+            voteList:[],
+            baseUrl:"http://localhost:8088/voteDetail/",
+            key:"",
+            ip:"",
+            deadline:"",
+        },
+        created(){
+            var ipAndCity = returnCitySN["cip"]+','+returnCitySN["cname"];
+            var strings = ipAndCity.split(",");
+            console.log(strings[0]);
+            this.ip=strings[0];
+            var url = "http://localhost:8088/voteList/"+this.ip;
+            axios.get(url).then(({data})=>{
+                this.voteList=data;
+            }).catch(function (error) {
+                console.log(error)
+            });
+        },
+        methods:{
+            search(event){
+                console.log(event.currentTarget.value)
+                this.key = event.currentTarget.value;
+            },
+            searching(){
+                var searchUrl = "http://localhost:8088/search?key="+this.key+"&ip="+this.ip;
+                axios.get(searchUrl).then(({data})=>{
+                    this.voteList=data;
+                });
+            }
+        }
+
+    })
+</script>
+</body>
+</html>

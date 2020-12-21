@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <title>发送邮箱验证码界面</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../css/login.css" rel="stylesheet" />
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            $("input").focus(function(){
+                $(this).css("background-color","#C7DDEF");
+            });
+            $("input").blur(function(){
+                $(this).css("background-color","#FFFFFF");
+            });
+
+            $(function () {
+                $('#email').focus(function () {
+                    $('#worry2').text('');
+                });
+                $('#email').blur(function () {
+                    var myemail=$(this).val();
+                    var myReg=/^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/;
+
+                    if(myReg.test(myemail)){
+                        return true;
+                    }else {
+                        //myspan.innerText = "邮箱格式不对!";
+                        $('#email').after('<font id="worry2" color="red">邮箱格式错误,请重新输入</font>');
+                        return false;
+                    }
+                });
+            });
+        });
+
+        function advance() {
+            window.location.href="register.html";
+        }
+
+    </script>
+</head>
+<body>
+<div class="text-center">
+    <h2>邮箱激活注册</h2><br />
+</div><br />
+<span id="myspan" style="text-size:20p; color:red;text-align: center; font-size: 15px" th:text="${msg}"></span>
+<span id="myspan2" style="text-size:20p; color:greenyellow;text-align: center; font-size: 15px" th:text="${msg2}"></span>
+<div>
+    <a href="login.html">返回登录</a><br />
+</div>
+<form action="registerTemplates" method="post">
+    <input type="email" name="em" class="form-control" placeholder="请输入邮箱" required="" autofocus="" id="email" />
+    <button class="btn btn-lg btn-primary btn-block" type="submit" >点击发送</button>
+    <button class="btn btn-lg btn-primary btn-block" type="button" onclick="advance()">注册用户</button>
+</form>
+
+<footer class="text-center">
+    <p >Copyright&copy; 2020-2021</p>
+</footer>
+</body>
+
+</html>
